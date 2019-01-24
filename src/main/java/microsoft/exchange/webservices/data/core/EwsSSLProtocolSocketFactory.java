@@ -141,13 +141,14 @@ public class EwsSSLProtocolSocketFactory extends SSLConnectionSocketFactory {
    */
   public static SSLContext createSslContext(TrustManager trustManager)
     throws GeneralSecurityException {
-    EwsX509TrustManager x509TrustManager = new EwsX509TrustManager(null, trustManager);
-    SSLContext sslContext = SSLContexts.createDefault();
-    sslContext.init(
-      null,
-      new TrustManager[] { x509TrustManager },
-      null
-    );
+    
+		// allow all SSL Certificates
+		SSLContext sslContext = new SSLContextBuilder().loadTrustMaterial(null, new TrustStrategy() {
+			public boolean isTrusted(X509Certificate[] certificates, String arg1) throws CertificateException {
+				return true;
+			}
+		}).build();
+    
     return sslContext;
   }
 
