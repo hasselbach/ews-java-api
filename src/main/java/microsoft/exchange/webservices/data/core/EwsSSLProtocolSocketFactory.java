@@ -25,6 +25,8 @@ package microsoft.exchange.webservices.data.core;
 
 import org.apache.http.conn.ssl.DefaultHostnameVerifier;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.conn.ssl.SSLContextBuilder;
+import org.apache.http.conn.ssl.TrustStrategy;
 import org.apache.http.ssl.SSLContexts;
 
 import javax.net.ssl.HostnameVerifier;
@@ -139,15 +141,16 @@ public class EwsSSLProtocolSocketFactory extends SSLConnectionSocketFactory {
    * @return initialized SSL context
    * @throws GeneralSecurityException on security error
    */
+  @SuppressWarnings("deprecation")
   public static SSLContext createSslContext(TrustManager trustManager)
     throws GeneralSecurityException {
     
-		// allow all SSL Certificates
-		SSLContext sslContext = new SSLContextBuilder().loadTrustMaterial(null, new TrustStrategy() {
-			public boolean isTrusted(X509Certificate[] certificates, String arg1) throws CertificateException {
-				return true;
-			}
-		}).build();
+    // allow all SSL Certificates
+    SSLContext sslContext = new SSLContextBuilder().loadTrustMaterial(null, new TrustStrategy() {
+       public boolean isTrusted(X509Certificate[] certificates, String arg1) throws CertificateException {
+          return true;
+       }
+    }).build();
     
     return sslContext;
   }
